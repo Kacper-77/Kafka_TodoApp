@@ -34,7 +34,7 @@ public class Todo {
     private boolean completed;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "owner_id", nullable = false)
     private User user;
 
     public Todo() {
@@ -45,15 +45,18 @@ public class Todo {
             String description,
             LocalDateTime createdAt,
             Priority priority,
-            boolean completed,
             User user) {
-
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
         this.priority = priority;
-        this.completed = completed;
+        this.completed = false;
         this.user = user;
+    }
+
+    public Todo(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public Long getId() {
