@@ -1,9 +1,34 @@
 package com.domain.kafka_todoapp.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.domain.kafka_todoapp.db.user.User;
+import com.domain.kafka_todoapp.dto.UserRequestDTO;
+import com.domain.kafka_todoapp.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PutMapping("/update-user")
+    public ResponseEntity<User> updateUser(@RequestBody UserRequestDTO dto) throws AccessDeniedException {
+        User updatedUser = userService.updateUser(dto);
+
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<Void> deleteUser(@RequestParam Long userId) throws AccessDeniedException {
+        userService.deleteUser(userId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

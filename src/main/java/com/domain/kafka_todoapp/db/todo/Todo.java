@@ -54,9 +54,11 @@ public class Todo {
         this.user = user;
     }
 
-    public Todo(String title, String description) {
+    public Todo(String title, String description, Priority priority, User user) {
         this.title = title;
         this.description = description;
+        this.priority = priority;
+        this.user = user;
     }
 
     public Long getId() {
@@ -95,12 +97,16 @@ public class Todo {
         this.priority = priority;
     }
 
-    public boolean isCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public void setUser(User user) {
