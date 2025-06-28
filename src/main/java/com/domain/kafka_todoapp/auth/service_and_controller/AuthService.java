@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,8 +68,8 @@ public class AuthService {
     }
 
     public AuthResponseDTO login(LoginRequestDTO dto) {
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 
         User user = userRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));

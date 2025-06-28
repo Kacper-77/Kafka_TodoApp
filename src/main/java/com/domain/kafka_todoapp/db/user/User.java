@@ -1,5 +1,6 @@
 package com.domain.kafka_todoapp.db.user;
 
+import com.domain.kafka_todoapp.auth.refresh_token.RefreshToken;
 import com.domain.kafka_todoapp.db.todo.Todo;
 import com.domain.kafka_todoapp.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +35,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Todo> todosList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RefreshToken> refreshToken;
 
     public User() {
     }

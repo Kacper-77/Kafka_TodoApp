@@ -25,9 +25,9 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/delete-user")
-    public ResponseEntity<Void> deleteUser(@RequestParam Long userId) throws AccessDeniedException {
-        userService.deleteUser(userId);
+    @DeleteMapping("/delete-user/{id}")
+    public ResponseEntity<Void> deleteUser(@RequestParam Long id) throws AccessDeniedException {
+        userService.deleteUser(id);
 
         return ResponseEntity.noContent().build();
     }

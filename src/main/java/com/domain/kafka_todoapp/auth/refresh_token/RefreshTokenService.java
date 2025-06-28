@@ -4,6 +4,7 @@ import com.domain.kafka_todoapp.db.user.User;
 import com.domain.kafka_todoapp.db.user.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,7 +15,7 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
-    private RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
     }
@@ -31,10 +32,12 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
+    @Transactional
     public void deleteByUser(User user) {
         refreshTokenRepository.deleteByUser(user);
     }
 
+    @Transactional
     public void deleteByRefreshToken(String refreshToken) {
         refreshTokenRepository.deleteByRefreshToken(refreshToken);
     }

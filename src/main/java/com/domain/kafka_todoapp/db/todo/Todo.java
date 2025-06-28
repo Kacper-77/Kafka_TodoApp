@@ -2,6 +2,7 @@ package com.domain.kafka_todoapp.db.todo;
 
 import com.domain.kafka_todoapp.db.user.User;
 import com.domain.kafka_todoapp.enums.Priority;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -35,6 +36,7 @@ public class Todo {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     public Todo() {

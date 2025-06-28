@@ -1,6 +1,7 @@
 package com.domain.kafka_todoapp.auth.service_and_controller;
 
 import com.domain.kafka_todoapp.auth.refresh_token.RefreshTokenRepository;
+import com.domain.kafka_todoapp.auth.refresh_token.RefreshTokenService;
 import com.domain.kafka_todoapp.db.user.User;
 import com.domain.kafka_todoapp.dto.AuthResponseDTO;
 import com.domain.kafka_todoapp.dto.LoginRequestDTO;
@@ -15,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
 
-    public AuthController(AuthService authService, RefreshTokenRepository refreshTokenRepository) {
+    public AuthController(AuthService authService, RefreshTokenService refreshTokenService) {
         this.authService = authService;
-        this.refreshTokenRepository = refreshTokenRepository;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/login-page")
@@ -45,7 +46,7 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public ResponseEntity<Void> logout(@RequestParam String refreshToken) {
-        refreshTokenRepository.deleteByRefreshToken(refreshToken);
+        refreshTokenService.deleteByRefreshToken(refreshToken);
 
         return ResponseEntity.noContent().build();
     }
