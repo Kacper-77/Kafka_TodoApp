@@ -4,6 +4,7 @@ import com.domain.kafka_todoapp.auth.jwt.JwtService;
 import com.domain.kafka_todoapp.auth.refresh_token.RefreshToken;
 import com.domain.kafka_todoapp.auth.refresh_token.RefreshTokenRepository;
 import com.domain.kafka_todoapp.auth.refresh_token.RefreshTokenService;
+import com.domain.kafka_todoapp.custom_exceptions.TokenExpiredException;
 import com.domain.kafka_todoapp.db.user.User;
 import com.domain.kafka_todoapp.db.user.UserRepository;
 import com.domain.kafka_todoapp.dto.AuthResponseDTO;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -85,12 +87,17 @@ public class AuthService {
     }
 
     public AuthResponseDTO getNewAccessToken(RefreshTokenDTO request) {
-        String refreshToken = request.getRefreshToken();
+        String refreshToken = request.refreshToken();
 
-        var newRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
+        var storedToken = refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new NoSuchElementException("Refresh Token not found."));
 
-        String newAccesToken = jwtService.generateToken(newRefreshToken.getUser());
+        if (storedToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            refreshTokenService.deleteByRefreshToken(storedToken.getRefreshToken());
+            throw new TokenExpiredException("Refresh token has been expired.");
+        }
+
+        String newAccesToken = jwtService.generateToken(storedToken.getUser());
 
         return new AuthResponseDTO(newAccesToken, refreshToken);
     }
