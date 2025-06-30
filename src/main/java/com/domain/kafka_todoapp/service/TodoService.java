@@ -47,8 +47,8 @@ public class TodoService {
         Todo updatedTodo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new NoSuchElementException("Todo with id: " + todoId + " doesn't exist."));
 
-        updatedTodo.setTitle(dto.getTitle());
-        updatedTodo.setDescription(dto.getDescription());
+        updatedTodo.setTitle(dto.title());
+        updatedTodo.setDescription(dto.description());
         updatedTodo.setPriority(priority);
 
         return todoRepository.save(updatedTodo);

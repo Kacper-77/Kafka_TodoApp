@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 public class TodoMapper {
     public Todo toTodoEntity(TodoRequestDTO dto, Priority priority, User user) {
         return new Todo(
-                dto.getTitle(),
-                dto.getDescription(),
+                dto.title(),
+                dto.description(),
                 priority,
                 user
         );

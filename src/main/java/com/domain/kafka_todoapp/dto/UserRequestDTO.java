@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class UserRequestDTO {
 
     @NotBlank(message = "Username is required.")
@@ -34,5 +33,8 @@ public class UserRequestDTO {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.age = user.getAge();
+    }
+
+    public UserRequestDTO() {
     }
 }
