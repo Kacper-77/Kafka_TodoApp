@@ -7,9 +7,9 @@ import com.domain.kafka_todoapp.auth.refresh_token.RefreshTokenService;
 import com.domain.kafka_todoapp.custom_exceptions.TokenExpiredException;
 import com.domain.kafka_todoapp.db.user.User;
 import com.domain.kafka_todoapp.db.user.UserRepository;
-import com.domain.kafka_todoapp.dto.AuthResponseDTO;
-import com.domain.kafka_todoapp.dto.LoginRequestDTO;
-import com.domain.kafka_todoapp.dto.RefreshTokenDTO;
+import com.domain.kafka_todoapp.auth.dto.AuthResponseDTO;
+import com.domain.kafka_todoapp.auth.dto.LoginRequestDTO;
+import com.domain.kafka_todoapp.auth.dto.RefreshTokenDTO;
 import com.domain.kafka_todoapp.dto.UserRequestDTO;
 import com.domain.kafka_todoapp.utils.UserMapper;
 import org.slf4j.Logger;
@@ -71,19 +71,26 @@ public class AuthService {
 
     public AuthResponseDTO login(LoginRequestDTO dto) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
+                new UsernamePasswordAuthenticationToken(dto.username(), dto.password()));
 
-        User user = userRepository.findByUsername(dto.getUsername())
+        User user = userRepository.findByUsername(dto.username())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
         refreshTokenService.deleteByUser(user);
 
-        UserRequestDTO claims = getClaims(user);
+        UserRequestDTO claims = new UserRequestDTO(user);
 
         String token = jwtService.generateToken(claims);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
         return new AuthResponseDTO(token, refreshToken.getRefreshToken());
+    }
+
+    public void logout(String refreshToken) {
+        var storedToken = refreshTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new NoSuchElementException("Refresh token not found."));
+
+        refreshTokenService.deleteByRefreshToken(storedToken.getRefreshToken());
     }
 
     public AuthResponseDTO getNewAccessToken(RefreshTokenDTO request) {
@@ -100,14 +107,5 @@ public class AuthService {
         String newAccesToken = jwtService.generateToken(storedToken.getUser());
 
         return new AuthResponseDTO(newAccesToken, refreshToken);
-    }
-
-    private UserRequestDTO getClaims(User user) {
-        UserRequestDTO userRequestDTO = new UserRequestDTO();
-        userRequestDTO.setUsername(user.getUsername());
-        userRequestDTO.setAge(user.getAge());
-        userRequestDTO.setEmail(user.getEmail());
-
-        return userRequestDTO;
     }
 }

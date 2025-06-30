@@ -35,7 +35,4 @@ public class UserRequestDTO {
         this.email = user.getEmail();
         this.age = user.getAge();
     }
-
-    public UserRequestDTO() {
-    }
 }

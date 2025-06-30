@@ -4,6 +4,7 @@
     <writeAnnotations>
       <writeAnnotation name="com.fasterxml.jackson.annotation.JsonIgnore" />
       <writeAnnotation name="jakarta.validation.constraints.Min" />
+      <writeAnnotation name="jakarta.validation.constraints.NotBlank" />
     </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />

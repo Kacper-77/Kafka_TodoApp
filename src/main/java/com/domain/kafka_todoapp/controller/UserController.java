@@ -3,6 +3,7 @@ package com.domain.kafka_todoapp.controller;
 import com.domain.kafka_todoapp.db.user.User;
 import com.domain.kafka_todoapp.dto.UserRequestDTO;
 import com.domain.kafka_todoapp.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<User> updateUser(@RequestBody UserRequestDTO dto) throws AccessDeniedException {
+    public ResponseEntity<User> updateUser(@RequestBody @Valid UserRequestDTO dto) throws AccessDeniedException {
         User updatedUser = userService.updateUser(dto);
 
         return ResponseEntity.ok(updatedUser);

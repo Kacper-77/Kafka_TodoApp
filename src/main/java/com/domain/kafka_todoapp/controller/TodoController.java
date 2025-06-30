@@ -1,10 +1,10 @@
 package com.domain.kafka_todoapp.controller;
 
 import com.domain.kafka_todoapp.db.todo.Todo;
-import com.domain.kafka_todoapp.db.todo.TodoRepository;
 import com.domain.kafka_todoapp.dto.TodoRequestDTO;
 import com.domain.kafka_todoapp.enums.Priority;
 import com.domain.kafka_todoapp.service.TodoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ public class TodoController {
     }
 
     @PostMapping("/add-todo")
-    public ResponseEntity<Todo> addTodo(@RequestBody TodoRequestDTO dto, @RequestParam Priority priority) throws AccessDeniedException {
+    public ResponseEntity<Todo> addTodo(@RequestBody @Valid TodoRequestDTO dto, @RequestParam Priority priority) throws AccessDeniedException {
         Todo newTodo = todoService.addTodo(dto, priority);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
@@ -39,7 +39,7 @@ public class TodoController {
     @PutMapping("/update-todo/{id}")
     public ResponseEntity<Todo> updateTodo(
             @RequestParam Long id,
-            @RequestBody TodoRequestDTO dto,
+            @RequestBody @Valid TodoRequestDTO dto,
             @RequestParam Priority priority) throws AccessDeniedException {
         Todo updatedTodo = todoService.updateTodo(id, dto, priority);
 
